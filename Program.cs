@@ -1,9 +1,5 @@
 ﻿using HtmlAgilityPack;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Xml;
 
 namespace CSSearchEngine
 {
@@ -14,8 +10,7 @@ namespace CSSearchEngine
         static void Main(string[] args)
         {
             List<string> filesList = GetHtmlFilesPaths();
-            Dictionary<string, Dictionary<string, int>> DocsFT 
-                        = new Dictionary<string, Dictionary<string, int>>();
+            Dictionary<string, Dictionary<string, int>> DocsFT = new();
 
             foreach (var filePath in filesList)
             {
@@ -42,14 +37,11 @@ namespace CSSearchEngine
             string strJson = JsonSerializer.Serialize<Dictionary<string, Dictionary<string, int>>>(DocsFT, opt);
             File.WriteAllText("index.json", strJson);
         }
-
         public static List<string> GetHtmlFilesPaths()
         {
-            List<string> files =
-                Directory.GetFiles(strDirectory, "*.*", SearchOption.AllDirectories)
+           return  Directory.GetFiles(strDirectory, "*.*", SearchOption.AllDirectories)
                          .Where(x => (x.ToLower().EndsWith("html") || x.ToLower().EndsWith("htm")))
                          .ToList();
-            return files;
         }
         public static List<string> GetTokens(string strFilePath)
         {
@@ -60,36 +52,18 @@ namespace CSSearchEngine
                                 .Where(TokenCriterias())
                                 .ToList();
         }
+        /// <summary>
+        /// Define Token Rules/Criteria
+        /// </summary>
+        /// <returns></returns>
         public static Func<string,bool> TokenCriterias()
         {
-            //( x.Length > 3 && x.Length < 15);
-            Func<string, bool> criList = x => true;
+            Func<string, bool> criList = x => x.Length > 3;
             return criList;
         }
         public static Func<string, string> TokenSelectors()
         {
-            Func<string, string> criList = x => x.ToUpper() ;
-            Func<string, string> criList2 = (input) =>
-            {
-                if (input.EndsWith("."))
-                {
-                    input = input.Substring(0, input.Length - 1);
-                    return input;
-                }
-                return input;
-            };
-            Func<string, string> criList3 = (input) =>
-            {
-                if (input.StartsWith("."))
-                {
-                    input = input.Substring(1, input.Length);
-                    return input;
-                }
-                return input;
-            };
-
-
-
+            Func<string, string> criList = x => x.ToUpper();
             return criList;
         }
         public static Dictionary<string,int> CreateFrequenceTable(string strFilePath)
