@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Xml;
 
 namespace CSSearchEngine
@@ -9,7 +10,7 @@ namespace CSSearchEngine
     public class Program
     {
         private const string strDirectory = "D:\\HTML-REZ";
-        private const int TopNTerms = 10;
+        private const int TopNTerms = 100;
         static void Main(string[] args)
         {
             List<string> filesList = GetHtmlFilesPaths();
@@ -28,10 +29,18 @@ namespace CSSearchEngine
                 Console.WriteLine($"{strFileName}");
                 foreach (KeyValuePair<string, int> kvp in sft)
                     Console.WriteLine($"\t{kvp.Key}: {kvp.Value}");
-                
-
                 Console.WriteLine("");
+
+                Console.WriteLine($"Indexing \"{filePath}\" has {sft.Values.Sum()} tokens");
+                DocsFT.Add(strFileName, sft);
+
             }
+
+
+            //Write Frequency to JSON file
+            var opt = new JsonSerializerOptions() { WriteIndented = true };
+            string strJson = JsonSerializer.Serialize<Dictionary<string, Dictionary<string, int>>>(DocsFT, opt);
+            File.WriteAllText("index.json", strJson);
         }
 
         public static List<string> GetHtmlFilesPaths()
@@ -53,7 +62,8 @@ namespace CSSearchEngine
         }
         public static Func<string,bool> TokenCriterias()
         {
-            Func<string, bool> criList = x => ( x.Length > 3 && x.Length < 15);
+            //( x.Length > 3 && x.Length < 15);
+            Func<string, bool> criList = x => true;
             return criList;
         }
         public static Func<string, string> TokenSelectors()
