@@ -9,6 +9,7 @@ namespace CSSearchEngine
     public class Program
     {
         private const string strDirectory = "D:\\HTML-REZ";
+        private const int TopNTerms = 10;
         static void Main(string[] args)
         {
             List<string> filesList = GetHtmlFilesPaths();
@@ -99,7 +100,7 @@ namespace CSSearchEngine
         public static Dictionary<string, int> SortFrequencyTableByFrequency(Dictionary<string, int> FrequencyTable)
         {
             Dictionary<string, int> freqTable = new Dictionary<string, int>();
-            List<KeyValuePair<string, int>> list = FrequencyTable.ToList();
+            List<KeyValuePair<string, int>> list = FrequencyTable.Take(TopNTerms).ToList();
             list.Sort(new  KeyValueComparer());
             foreach (var item in list)
             {
