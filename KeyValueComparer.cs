@@ -10,7 +10,9 @@ namespace CSSearchEngine
     {
         public int Compare(KeyValuePair<string, int> x, KeyValuePair<string, int> y)
         {
-            return x.Value == y.Value ? 0 : x.Value > y.Value ? -11 : 1;
+            if(x.Value == y.Value)
+                return 0;
+            return x.Value > y.Value ? 1 : -1;
         }
     }
 }

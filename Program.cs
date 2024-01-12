@@ -17,8 +17,8 @@ namespace CSSearchEngine
                 string strFileName = Path.GetFileNameWithoutExtension(filePath);
                 var ft = CreateFrequenceTable(filePath);
                 var sft = SortFrequencyTableByFrequency(ft);
-                
-                if (sft.Count() == 0)
+
+                if (!sft.Any())
                     continue;
 
                 Console.WriteLine($"{strFileName}");
@@ -39,14 +39,14 @@ namespace CSSearchEngine
         }
         public static List<string> GetHtmlFilesPaths()
         {
-           return  Directory.GetFiles(strDirectory, "*.*", SearchOption.AllDirectories)
-                         .Where(x => (x.ToLower().EndsWith("html") || x.ToLower().EndsWith("htm")))
-                         .ToList();
+            return Directory.GetFiles(strDirectory, "*.*", SearchOption.AllDirectories)
+                          .Where(x => (x.ToLower().EndsWith("html") || x.ToLower().EndsWith("htm")))
+                          .ToList();
         }
         public static List<string> GetTokens(string strFilePath)
         {
             string strFileContent = File.ReadAllText(strFilePath);
-            return  ExtractText(strFileContent).Split(" ",
+            return ExtractText(strFileContent).Split(" ",
                                 StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
                                 .Select(x => x.ToUpper())
                                 .Where(TokenCriterias())
@@ -56,7 +56,7 @@ namespace CSSearchEngine
         /// Define Token Rules/Criteria
         /// </summary>
         /// <returns></returns>
-        public static Func<string,bool> TokenCriterias()
+        public static Func<string, bool> TokenCriterias()
         {
             Func<string, bool> criList = x => x.Length > 3;
             return criList;
@@ -66,16 +66,16 @@ namespace CSSearchEngine
             Func<string, string> criList = x => x.ToUpper();
             return criList;
         }
-        public static Dictionary<string,int> CreateFrequenceTable(string strFilePath)
+        public static Dictionary<string, int> CreateFrequenceTable(string strFilePath)
         {
-            Dictionary<string, int> freqTable = new  Dictionary<string, int>();
+            Dictionary<string, int> freqTable = new Dictionary<string, int>();
             List<string> tokenz = GetTokens(strFilePath);
             foreach (var term in tokenz)
             {
                 if (freqTable.ContainsKey(term))
                     freqTable[term]++;
                 else
-                    freqTable.Add(term, 1);                
+                    freqTable.Add(term, 1);
             }
 
 
@@ -85,7 +85,7 @@ namespace CSSearchEngine
         {
             Dictionary<string, int> freqTable = new Dictionary<string, int>();
             List<KeyValuePair<string, int>> list = FrequencyTable.Take(TopNTerms).ToList();
-            list.Sort(new  KeyValueComparer());
+            list.Sort(new KeyValueComparer());
             foreach (var item in list)
             {
                 freqTable.Add(item.Key, item.Value);
