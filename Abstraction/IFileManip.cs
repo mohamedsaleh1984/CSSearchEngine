@@ -8,6 +8,6 @@ namespace CSSearchEngine.Abstraction
 {
     public interface IFileManip
     {
-
-    }
+		List<string> GetHtmlFilesPaths(string location);
+	}
 }

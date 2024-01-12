@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace CSSearchEngine
 {
-    public class KeyValueComparer : IComparer<KeyValuePair<string, int>>
-    {
-        public int Compare(KeyValuePair<string, int> x, KeyValuePair<string, int> y)
-        {
-            if(x.Value == y.Value)
-                return 0;
-            return x.Value > y.Value ? 1 : -1;
-        }
-    }
+	public class KeyValueComparer : IComparer<KeyValuePair<string, int>>
+	{
+		public int Compare(KeyValuePair<string, int> x, KeyValuePair<string, int> y)
+		{
+			return x.Value == y.Value ? 0 : (x.Value > y.Value ? 1 : -1);
+		}
+	}
 }
