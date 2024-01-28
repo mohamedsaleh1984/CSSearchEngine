@@ -1,31 +1,28 @@
 ﻿using CSSearchEngine.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CSSearchEngine.Extensions;
 
 namespace CSSearchEngine.Impl
 {
 	public class FileManip : IFileManip
     {
-		//TODO
 		private List<string> GetAcceptedFilesExtensions()
 		{
 			return new List<string>()
 			{
-				"html","html"
+				"txt"
 			};
 		}
 
-		public List<string> GetHtmlFilesPaths(string location)
+		public List<string> GetFilesPaths(string location)
 		{
 			if(!Directory.Exists(location)) {
 				throw new Exception("Directory is not exists.");
 			}
 
-			return Directory.GetFiles(location, "*.*", SearchOption.AllDirectories)
-						  .Where(x => (x.ToLower().EndsWith("html") || x.ToLower().EndsWith("html")))
+			string[] accptedExtensions = GetAcceptedFilesExtensions().ToArray();
+
+            return Directory.GetFiles(location, "*.*", SearchOption.AllDirectories)
+						  .Where(x => x.EndsWith(accptedExtensions))
 						  .ToList();
 		}
 	}

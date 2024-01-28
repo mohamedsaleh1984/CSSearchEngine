@@ -11,6 +11,12 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="exclude.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
  
 
 </Project>

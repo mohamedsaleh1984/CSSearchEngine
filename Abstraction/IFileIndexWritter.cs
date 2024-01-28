@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSSearchEngine.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace CSSearchEngine.Abstraction
 {
-    public interface IFileManip
+    public interface IFileIndexWritter
     {
-		List<string> GetFilesPaths(string location);
-	}
+        public void Write(FileIndex fileIndex);
+    }
 }
