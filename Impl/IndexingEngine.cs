@@ -17,6 +17,7 @@ namespace CSSearchEngine.Impl
         private const int TopNTerms = 100;
         private static FileManip fileManip = new FileManip();
         private static FileIndexWritter indexWritter = new FileIndexWritter();
+        private static Tokenizer tokenizer = new Tokenizer();
 
         /// <summary>
         /// Create Frequency Table
@@ -26,7 +27,7 @@ namespace CSSearchEngine.Impl
         public Dictionary<string, int> CreateFrequenceTable(string filePath)
         {
             Dictionary<string, int> freqTable = new();
-            List<string> tokenz = GetTokens(filePath);
+            List<string> tokenz = tokenizer.GetTokens(filePath);
             foreach (var term in tokenz)
             {
                 if (freqTable.ContainsKey(term))
@@ -37,21 +38,6 @@ namespace CSSearchEngine.Impl
 
 
             return freqTable;
-        }
-
-        /// <summary>
-        /// Tokenize File 
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        public List<string> GetTokens(string filePath)
-        {
-            string strFileContent = File.ReadAllText(filePath);
-            return strFileContent.Split(" ",
-                                StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-                                .Select(x => x.ToUpper())
-                                .Where(TokenCriterias())
-                                .ToList();
         }
 
         /// <summary>
@@ -89,31 +75,14 @@ namespace CSSearchEngine.Impl
 
             string strContent = File.ReadAllText(originalFile);
 
-            string strNewContent = CleanTextContent(strContent);
+            string strNewContent = tokenizer.CleanTextContent(strContent);
 
             File.WriteAllText(strSearchableFile, strNewContent);
 
             return strSearchableFile;
         }
 
-        /// <summary>
-        /// Remove extra contact and retain only words with more than 3 letters.
-        /// </summary>
-        /// <param name="strContent"></param>
-        /// <returns></returns>
-        private string CleanTextContent(string strContent)
-        {
-            List<string> allWords = strContent.Normalize().Split(new char[] { '\n', '\t', ' ' }).ToList();
-
-            for (int i = 0; i < allWords.Count; i++)
-                allWords[i] = allWords[i].TrimExtended();
-
-            allWords = allWords.Where(x => x.Length > 3).ToList();
-
-            string srtReturn = string.Join(" ", allWords);
-
-            return srtReturn.ToString();
-        }
+      
 
         /// <summary>
         /// Indexing
@@ -126,7 +95,6 @@ namespace CSSearchEngine.Impl
 
             foreach (var filePath in filesList)
             {
-                string strFileName = Path.GetFileNameWithoutExtension(filePath);
                 //Remove unnecassery chars from words like . ! ?
                 string newFilePath = CreateSearchableFile(filePath);
 
@@ -187,14 +155,10 @@ namespace CSSearchEngine.Impl
             }
 
             fileIndex.TokenStats = TokenStats;
-
+            
             return fileIndex;
         }
-        private Func<string, bool> TokenCriterias()
-        {
-            Func<string, bool> criList = x => x.Length > 3;
-            return criList;
-        }
+      
 
         /// <summary>
         /// Remove excluded Token
@@ -207,7 +171,7 @@ namespace CSSearchEngine.Impl
             exluded = exluded.Select(x => x.ToUpper()).ToList();
 
             Dictionary<string, int> freqTable = ft;
-            for (int i = 0;i < exluded.Count(); i++)
+            for (int i = 0;i < exluded.Count; i++)
             {
                 if (freqTable.ContainsKey(exluded[i]))
                     freqTable.Remove(exluded[i]);

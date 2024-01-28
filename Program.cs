@@ -8,11 +8,16 @@ namespace CSSearchEngine
     public class Program
     {
         private const string strDirectory = "D:\\text-search-space";
-		private static IndexingEngine engine = new IndexingEngine();
+		private static IndexingEngine IndexEngine = new IndexingEngine();
+        private static SearchPrompt SearchEngine = new SearchPrompt();
 
-		static void Main(string[] args)
+        static void Main(string[] args)
         {
-            engine.StartIndexing(strDirectory);
+            IndexEngine.StartIndexing(strDirectory);
+
+            string query = "Hello, World";
+            SearchEngine.GetResult(query);
+
         }
     }
 }

@@ -8,9 +8,12 @@ namespace CSSearchEngine.Impl
 {
     public class SearchPrompt : ISearchPrompt
     {
+        string strIndexDir = "D:\\text-search-space\\_index";
+
+        private static Tokenizer tokenizer = new Tokenizer();
         public List<SearchResultSet> GetResult(string Prompt)
         {
-            List<string> Tokenized = Tokenize(Prompt);
+            List<string> Tokenized = tokenizer.GetTokens(Prompt);
             return GetSearchResultSets(Tokenized);
         }
 
@@ -20,8 +23,6 @@ namespace CSSearchEngine.Impl
         /// <returns>List of Indexed Files</returns>
         private List<FileIndex> LoadIndexingDirectory()
         {
-            string strIndexDir = "D:\\text-search-space\\_index";
-
             List<string> indexedFiles = Directory.GetFiles(strIndexDir).ToList();
 
             List<FileIndex> indexedJson = new();
@@ -36,21 +37,6 @@ namespace CSSearchEngine.Impl
 
             return indexedJson;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Prompt"> Tolulope Case Manager </param>
-        /// <returns>
-        ///  TOLULOPE
-        ///  CASE
-        ///  MANAGER
-        /// </returns>
-        private List<string> Tokenize(string Prompt)
-        {
-            return Prompt.Split(new char[] { ' '}).Select(x => x.ToUpper()).ToList();
-        }
-
 
         private List<SearchResultSet> GetSearchResultSets(List<string>  tokens) {
             List<FileIndex> indexedFiles = LoadIndexingDirectory();
@@ -78,8 +64,5 @@ namespace CSSearchEngine.Impl
             bool re = fileIndex.Tokens.ContainsAll(tokens);
             return re;
         }
-
-
-
     }
 }
