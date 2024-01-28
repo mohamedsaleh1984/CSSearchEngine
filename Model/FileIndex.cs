@@ -8,10 +8,10 @@ namespace CSSearchEngine.Model
 {
     public class FileIndex
     {
-        public string OriginalPath { get; set; }
-        public string FileName { get; set; }
-        public List<TokenStat> TokenStats { get; set; }
-        public List<string> Tokens { get; set; }    
+        public string? OriginalPath { get; set; }
+        public string? FileName { get; set; }
+        public List<TokenStat>? TokenStats { get; set; }
+        public List<string>? Tokens { get; set; }    
         public double TotalnumberOfTokens { get; set; }
     }
 }
