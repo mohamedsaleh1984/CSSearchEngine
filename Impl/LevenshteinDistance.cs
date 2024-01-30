@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace CSSearchEngine.Impl
 {
+
     public class LevenshteinDistance : ILevenshteinDistance
-    {        
+    {
+        private const int ResultsToPresent = 10;
         private int CalculateLevenshteinDistance(string str1, string str2)
         {
             int lenStr1 = str1.Length + 1;
@@ -61,7 +63,7 @@ namespace CSSearchEngine.Impl
             distances.Sort((x, y) => x.Item2.CompareTo(y.Item2));
 
             //Get Top 10 Words
-            distances = distances.Take(10).ToList();
+            distances = distances.Take(ResultsToPresent).ToList();
 
             //return words
             return distances.Select(x => x.Item1).ToList(); 
