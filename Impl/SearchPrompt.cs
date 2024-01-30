@@ -38,11 +38,16 @@ namespace CSSearchEngine.Impl
             return indexedJson;
         }
 
+        /// <summary>
+        /// Get Results
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
         private List<SearchResultSet> GetSearchResultSets(List<string>  tokens) {
             List<FileIndex> indexedFiles = LoadIndexingDirectory();
             List<SearchResultSet> searchResults = new();
 
-            //all Tokens
+            //all Tokens (Exact Match)
             var all_tokens = indexedFiles.Where(x => DocumentHasAllTokens(x,tokens)).ToList();
 
             //any Tokens
@@ -54,14 +59,27 @@ namespace CSSearchEngine.Impl
             return searchResults;
         }
 
+        /// <summary>
+        /// Check if search tokens are all exists in FileIndex
+        /// </summary>
+        /// <param name="fileIndex"></param>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
         private bool DocumentHasAllTokens(FileIndex fileIndex,List<string> tokens)
         {
             bool re = fileIndex.Tokens.ContainsAll(tokens);
             return re;
         }
+
+        /// <summary>
+        /// Check if search any tokens exists in FileIndex
+        /// </summary>
+        /// <param name="fileIndex"></param>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
         private bool DocumentHasAnyTokens(FileIndex fileIndex, List<string> tokens)
         {
-            bool re = fileIndex.Tokens.ContainsAll(tokens);
+            bool re = !fileIndex.Tokens.ContainsAny(tokens);
             return re;
         }
     }

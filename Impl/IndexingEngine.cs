@@ -35,8 +35,6 @@ namespace CSSearchEngine.Impl
                 else
                     freqTable.Add(term, 1);
             }
-
-
             return freqTable;
         }
 
@@ -82,8 +80,6 @@ namespace CSSearchEngine.Impl
             return strSearchableFile;
         }
 
-      
-
         /// <summary>
         /// Indexing
         /// </summary>
@@ -92,6 +88,7 @@ namespace CSSearchEngine.Impl
         {
             List<string> filesList = fileManip.GetFilesPaths(strDirectory);
             Dictionary<string, Dictionary<string, int>> docsFreqTable = new();
+            List<FileIndex> fileIndices = new();
 
             foreach (var filePath in filesList)
             {
@@ -116,6 +113,8 @@ namespace CSSearchEngine.Impl
 
                 //For Debugging Purposes...
                 docsFreqTable.Add(filePath, sft);
+
+                fileIndices.Add(fileIndex);
             }
 
 
@@ -123,6 +122,9 @@ namespace CSSearchEngine.Impl
             var opt = new JsonSerializerOptions() { WriteIndented = true };
             string strJson = JsonSerializer.Serialize(docsFreqTable, opt);
             File.WriteAllText("index.json", strJson);
+
+            //Write Token Space
+            CreateTokenSpace(fileIndices);
         }
 
         /// <summary>
@@ -180,5 +182,23 @@ namespace CSSearchEngine.Impl
             return freqTable;
         }
 
+        //TODO: NEED TO IMPLEMENT Extension for HashSet to Add Range instead of One by One.
+        //TODO: 
+        public void CreateTokenSpace(List<FileIndex> fileIndices)
+        {
+            
+            HashSet<string> tokens = new HashSet<string>();   
+            foreach (var fileIndex in fileIndices)
+            {
+                List<string> fileTokens = fileIndex.Tokens;
+                ///
+            }
+            //Write Token Space
+            var opt = new JsonSerializerOptions() { WriteIndented = true };
+            List<string> tokenz = new();
+            string strJson = JsonSerializer.Serialize(tokenz, opt);
+            File.WriteAllText("tokenz.json", strJson);
+
+        }
     }
 }
