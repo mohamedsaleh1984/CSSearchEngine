@@ -18,7 +18,9 @@ to track the location changes and avoid re-indexing.
 
 ## Phase 3
 (Under development)
-Build an Event Hook to read the input from Windows Explorer and pass this to a handler how
+Build an Event Hook to read the input from Windows Explorer search bar and let the engine handle (C++/Shell) 
+[https://learn.microsoft.com/en-us/windows/win32/](https://learn.microsoft.com/en-us/windows/win32/)
+
 search the indexed space and show the result including
 - filename
 - size
